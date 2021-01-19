@@ -1,0 +1,176 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="searchcreate">
+  <button id="searchb">Search for Recipes</button>
+  <button id="createb">Create a Recipe</button>
+</div>
+
+<form id="search" method="GET" action="/recipes">
+  <fieldset>
+    {{rsform.recipename(id="rname")}}
+  </fieldset>
+</form>
+
+<form id="create" method="POST" action="/recipes">
+  {{rform.hidden_tag()}}
+  <fieldset>
+    <div>
+      {{rform.recipename.label}}
+      {% if rform.recipename.errors %}
+        {% for error in rform.recipename.errors %}
+          <span>{{error}}</span>
+        {% endfor %}
+      {% else %}
+        {{rform.recipename}}
+      {% endif %}
+    </div>
+    <div>
+      {{rform.recipedesc.label}}
+      {% if rform.recipedesc.errors %}
+        {% for error in rform.recipedesc.errors %}
+          <span>{{error}}</span>
+        {% endfor %}
+      {% else %}
+        {{rform.recipedesc}}
+      {% endif %}
+    </div>
+    <div>
+      {{rform.photo.label}}
+      {% if rform.photo.errors %}
+        {% for error in rform.photo.errors %}
+          <span>{{error}}</span>
+        {% endfor %}
+      {% else %}
+        {{rform.photo}}
+      {% endif %}
+    </div>
+    <div id="steps">
+      <button type="button" id="addstep">Add Step</button>
+      {{rform.steps.label}}
+      {% for step in rform.steps %}
+        <div class="step">
+          {% if step.stepnumber.errors %}
+            {% for error in step.stepnumber.errors %}
+              <span>{{error}}</span>
+            {% endfor %}
+          {% else %}
+          {{step.stepnumber}}
+          {% endif %}      
+          {% if step.steptext.errors %}
+            {% for error in step.steptext.errors %}
+              <span>{{error}}</span>
+            {% endfor %}
+          {% else %}
+            {{step.steptext}}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <div id="ingredients">
+      <button type="button" id="addingredient">Add Ingredients</button>
+      {{rform.ingredients.label}}
+      {% for ingredient in rform.ingredients %}
+        <div class="ingredient" id="ingredientprototype">
+          {{ingredient.ingredient}}
+          {{ingredient.unit}}  
+          {% if ingredient.amount.errors %}
+            {% for error in ingredient.amount.errors %}
+              <span>{{error}}</span>
+            {% endfor %}
+          {% else %}
+            {{ingredient.amount}}
+          {% endif %}
+      {% endfor %}
+    </div>
+    <div>
+      {{rform.submit}}
+    </div>
+  </fieldset>
+</form>
+
+<!--cards-->
+<!--When we pass 'recipes' it's from search results. None highlighted.-->
+
+<div class="recipes">
+  <!--When we pass a single recipe by ID - means the user just created it, so it's active. -->
+
+  {% if recipe %}
+  <div class="recipe recipes-active">
+    <img class="" src="static/images/bbb.jpg" alt="{{ recipe.name }}">
+    <button class="hidden-button">Change Image</button>
+    <div class="recipe-header" id="bbb">
+      <div class="slide active-slide">
+        <h4><b>{{recipe.recipename}}</b></h4>
+        <div class="recipe-detail">
+          <p>{{recipe.recipedesc}}</p>
+          {% if current_user.is_authenticated and current_user.id == recipe.author_id %}
+          <button id="edit">Edit</button>
+          
+          {% endif %}
+        </div>
+      </div>
+      {% for step in recipe.steps %}
+      <div class="slide">
+        <h4><b></b></h4>
+        <div class="recipe-detail">
+          <h1>{{step.stepnumber}}</h1>
+          <p>{{step.steptext}}</p>
+        </div>
+      </div>
+      <div class="slide ingredients">
+        {% for ingredient in recipe.ingredients %}
+        <div class="ingredient">
+          <h4>{{ingredient.ingredient_id}}</h4>
+          <h4>{{ingredient.unit}}</h4>
+          <h4>{{ingredient.amount}}</h4>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}           
+    </div>
+  </div>
+
+  {% else %}
+
+  {% for recipe in recipes %}
+  <div class="recipe">
+    <img class="" src="static/images/bbb.jpg" alt="{{ recipe.name }}">
+    <button class="edit">Change Image</button>
+    <div class="recipe-header" id="bbb">
+      <div class="slide active-slide">
+        <h4><b>{{recipe.recipename}}</b></h4>
+        <div class="recipe-detail">
+          <p>{{recipe.recipedesc}}</p>
+          {% if current_user.is_authenticated and current_user.id == recipe.author_id %}
+          <button id="edit">Edit</button>
+          {% endif %}
+        </div>
+      </div>
+      {% for step in recipe.steps %}
+      <div class="slide">
+        <h4><b></b></h4>
+        <div class="recipe-detail">
+          <h1>{{step.stepnumber}}</h1>
+          <p>{{step.steptext}}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+  
+  
+    
+  {% endif %}
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="static/js/main.js"></script>
+<script src="static/js/recipes.js"></script>
+<script>
+  
+  
+</script>
+
+{% endblock %}

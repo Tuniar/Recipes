@@ -1,0 +1,149 @@
+html {
+  font-family: sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+.container {
+  padding-right: 5%;
+  padding-left: 5%;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: plum;
+}
+
+.active{
+  background-color: orange;
+}
+
+#menu {
+  display: none;
+}
+
+nav > a  {
+  font-size: 1.6em;
+  min-height: 50px;
+  padding: 1rem 4rem;
+}
+
+ul {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+}
+
+nav > div > ul > li {
+  list-style: none;
+  display: grid;
+  min-height: 30px;
+  margin: 0;
+  background-color: darkcyan;
+  text-decoration: none;
+  border-radius: 5px;
+  padding: 1%;
+  text-align: center;
+}
+
+nav {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  background-color: darkblue;
+  padding-bottom: 1rem;
+}
+
+.menu-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: all .5s ease-in-out;
+  border: 3px solid #fff;
+}
+
+.menu-btn-burger {
+  width: 50px;
+  height: 6px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(255,101,47.2);
+  transition: all .5s ease-in-out;
+}
+
+.menu-btn-burger::before,
+.menu-btn-burger::after {
+  justify-self: center;
+  align-self: center;
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 6px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(255,101,47.2);
+  transition: all .5s ease-in-out;
+}
+
+.menu-btn-burger::before {
+  transform: translateY(-16px);
+}
+
+.menu-btn-burger::after {
+  transform: translateY(16px);
+}
+
+.menu-btn.open .menu-btn-burger {
+  transform: translateX(-50px);
+  background: transparent;
+  box-shadow: none;
+}
+
+.menu-btn.open .menu-btn-burger::before {
+  transform: rotate(45deg) translate(35px, -35px);
+}
+
+.menu-btn.open .menu-btn-burger::after {
+  transform: rotate(-45deg) translate(35px, 35px);
+}
+
+@media (min-width: 50rem) {
+  nav {
+    grid-template-columns: 2fr 1fr;
+    justify-items: center;
+  }
+}
+@media (min-width: 50rem) {
+  .container {
+    padding-right: 20%;
+    padding-left: 20%;
+  }
+  .menu-btn {
+    display: none;
+  }
+  #menu {
+    display: grid;
+  }
+  #menu > ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 80rem) {
+  #menu > ul {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 1em;
+    margin-right: 1%;
+  } 
+}
