@@ -1,7 +1,7 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from app.forms import RecipeForm, RecipeStepForm, SearchRecipeForm, RegistrationForm, LoginForm, RecipeIngredientForm
 from app import app, db, bcrypt
-from app.models import Recipe, RecipeStep, User, Unit, RecipeIngredient
+from app.models import Recipe, RecipeStep, User, Unit, RecipeIngredient, Ingredient
 from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route("/")
@@ -17,6 +17,7 @@ def recipes():
     rsform = SearchRecipeForm() #Form to search for recipes (not used yet)
     riform = RecipeIngredientForm() #Subform to add an ingredient.
     if rform.validate_on_submit(): #When the create form is submitted...
+        print(request.data)
         recipe = Recipe(recipename=rform.recipename.data, recipedesc=rform.recipedesc.data, author_id=current_user.id) #Create the recipe...
         db.session.add(recipe)
         db.session.commit()
@@ -27,6 +28,7 @@ def recipes():
             db.session.add(new_step)
             db.session.commit()
         for ingredient in rform.ingredients.data: #Create each ingredient in the recipe...
+            print(ingredient['ingredient'])
             ingredient = RecipeIngredient(recipe_id=recipe.id, ingredient_id=ingredient['ingredient'], unit=ingredient['unit'], amount=ingredient['amount'])
             db.session.add(ingredient)
             db.session.commit()
@@ -37,6 +39,7 @@ def recipes():
         recipes = Recipe.query.filter(Recipe.recipename.contains(searchstring)).all()
         return jsonify(Recipe.serialize_list(recipes))
     recipes = Recipe.query.all()
+    #recipes = db.session.query(Recipe, User, RecipeIngredient, RecipeStep).join(RecipeIngredient, RecipeIngredient.recipe_id == Recipe.id).join(Ingredient, Ingredient.id == RecipeIngredient.ingredient_id)
     return render_template('recipes.html', title='Recipes', rform=rform, sform=sform, rsform=rsform, riform=riform, recipes=recipes)
 
 @app.route("/register", methods=["GET", "POST"])
@@ -55,9 +58,9 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if current_user.is_authenticated:
-        user = User.query.filter_by(email=form.email.data)
     form = LoginForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('recipes'))
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):

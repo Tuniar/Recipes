@@ -84,10 +84,10 @@
           {% endif %}
       {% endfor %}
     </div>
-    <div>
-      {{rform.submit}}
-    </div>
   </fieldset>
+  <div>
+    {{rform.submit}}
+  </div>
 </form>
 
 <!--cards-->
@@ -119,6 +119,7 @@
           <p>{{step.steptext}}</p>
         </div>
       </div>
+      {% endfor %}
       <div class="slide ingredients">
         {% for ingredient in recipe.ingredients %}
         <div class="ingredient">
@@ -127,8 +128,7 @@
           <h4>{{ingredient.amount}}</h4>
         </div>
         {% endfor %}
-      </div>
-      {% endfor %}           
+      </div>        
     </div>
   </div>
 
@@ -157,6 +157,15 @@
         </div>
       </div>
       {% endfor %}
+      <div class="slide ingredients">
+        {% for ingredient in recipe.ingredients %}
+        <div class="ingredient">
+          <h4>{{ingredient.ingredient_id}}</h4>
+          <h4>{{ingredient.unit}}</h4>
+          <h4>{{ingredient.amount}}</h4>
+        </div>
+        {% endfor %}
+      </div>    
     </div>
   </div>
   {% endfor %}

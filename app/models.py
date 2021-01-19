@@ -55,11 +55,12 @@ class Ingredient(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.Text, nullable=False)
   image_file = db.Column(db.String(20))
+  recipes = db.relationship('RecipeIngredient', backref='ingredient', lazy=False)
 
   def __repr__(self):
     return f"Ingredient {self.name}"
 
-class RecipeIngredient(db.Model):
+class RecipeIngredient(db.Model, Serializer):
   id = db.Column(db.Integer, primary_key=True)
   recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
   ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'), nullable=False)

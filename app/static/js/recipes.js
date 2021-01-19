@@ -110,9 +110,14 @@ addingredient.addEventListener('click', function (event) {
   let ingredients = addingredient.parentElement;
   let ingredientcount = ingredients.querySelectorAll('.ingredient').length;
   let prototype = document.getElementById('ingredientprototype');
-  console.log(prototype);
   let clone = prototype.cloneNode(true);
-  // TO DO: Set attributes of clone correctly (per ingredientcount), empty any value, and append to Ingredients div.
+  clone.childNodes[1].id = `ingredients-${ingredientcount}-ingredient`;
+  clone.childNodes[3].id = `ingredients-${ingredientcount}-unit`;
+  clone.childNodes[5].id = `ingredients-${ingredientcount}-amount`;
+  clone.childNodes[1].name = `ingredients-${ingredientcount}-ingredient`;
+  clone.childNodes[3].name = `ingredients-${ingredientcount}-unit`;
+  clone.childNodes[5].name = `ingredients-${ingredientcount}-amount`;
+  console.log(clone.childNodes)
   ingredients.appendChild(clone);
 })
 
