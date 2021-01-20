@@ -160,9 +160,8 @@
       <div class="slide ingredients">
         {% for ingredient in recipe.ingredients %}
         <div class="ingredient">
-          <h4>{{ingredient.ingredient_id}}</h4>
-          <h4>{{ingredient.unit}}</h4>
-          <h4>{{ingredient.amount}}</h4>
+          <h4>{{ingredient.ingredient.name}}</h4>
+          <h4>{{ingredient.amount}} {{ingredient.unit.name}}</h4>
         </div>
         {% endfor %}
       </div>    

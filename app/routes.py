@@ -17,7 +17,6 @@ def recipes():
     rsform = SearchRecipeForm() #Form to search for recipes (not used yet)
     riform = RecipeIngredientForm() #Subform to add an ingredient.
     if rform.validate_on_submit(): #When the create form is submitted...
-        print(request.data)
         recipe = Recipe(recipename=rform.recipename.data, recipedesc=rform.recipedesc.data, author_id=current_user.id) #Create the recipe...
         db.session.add(recipe)
         db.session.commit()
@@ -29,7 +28,7 @@ def recipes():
             db.session.commit()
         for ingredient in rform.ingredients.data: #Create each ingredient in the recipe...
             print(ingredient['ingredient'])
-            ingredient = RecipeIngredient(recipe_id=recipe.id, ingredient_id=ingredient['ingredient'], unit=ingredient['unit'], amount=ingredient['amount'])
+            ingredient = RecipeIngredient(recipe_id=recipe.id, ingredient_id=ingredient['ingredient'], unit_id=ingredient['unit'], amount=ingredient['amount'])
             db.session.add(ingredient)
             db.session.commit()
         flash('Your recipe has been created!', 'success')
@@ -39,7 +38,6 @@ def recipes():
         recipes = Recipe.query.filter(Recipe.recipename.contains(searchstring)).all()
         return jsonify(Recipe.serialize_list(recipes))
     recipes = Recipe.query.all()
-    #recipes = db.session.query(Recipe, User, RecipeIngredient, RecipeStep).join(RecipeIngredient, RecipeIngredient.recipe_id == Recipe.id).join(Ingredient, Ingredient.id == RecipeIngredient.ingredient_id)
     return render_template('recipes.html', title='Recipes', rform=rform, sform=sform, rsform=rsform, riform=riform, recipes=recipes)
 
 @app.route("/register", methods=["GET", "POST"])

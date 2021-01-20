@@ -40,7 +40,7 @@ class Recipe(db.Model, Serializer):
   author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
   def __repr__(self):
-    return f"Recipes {self:recipename}"
+    return f"Recipes {self.recipename}"
 
 class RecipeStep(db.Model, Serializer):
   id = db.Column(db.Integer, primary_key=True)
@@ -64,7 +64,7 @@ class RecipeIngredient(db.Model, Serializer):
   id = db.Column(db.Integer, primary_key=True)
   recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
   ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'), nullable=False)
-  unit = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
+  unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
   amount = db.Column(db.Integer, nullable=False)
 
   def __repr__(self):
@@ -73,7 +73,7 @@ class RecipeIngredient(db.Model, Serializer):
 class Unit(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.Text, nullable=False)
-
+  ingredients = db.relationship('RecipeIngredient', backref='unit', lazy=False)
   def __repr__(self):
     return f"Unit {self.name}"
 
