@@ -14,6 +14,33 @@
   background-color: white;
 }
 
+.Create-Grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 100px 100px auto;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". Header Header ."
+    ". Image Image ."
+    "Steps Steps Ingredients Ingredients";
+  align-items: center;
+}
+.Header { grid-area: Header; }
+.Image { grid-area: Image; }
+.Steps { grid-area: Steps; }
+.Ingredients { 
+  grid-area: Ingredients;;
+}
+
+.ingredients {
+  display:none;
+  justify-items: center;
+  text-align: center;
+}
+
+.ingredients .ingredient:nth-child(even) {background: #CCC}
+.ingredients .ingredient:nth-child(odd) {background: #FFF}
+
 .recipes-active > .recipe-header > .slide > .recipe-detail {
   display: initial;
 }

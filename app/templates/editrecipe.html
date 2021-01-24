@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="recipes">
+  <!--Ingredients and Steps now showing because hidden in CSS. JS not working because missing elements in HTML. 
+  Solution is to create a smaller CSS and JS file for this page -->
+
+  {% if recipe %}
+  <div class="recipe">
+    <div class="recipe-image">
+      <img class="" src="static/images/bbb.jpg" alt="{{ recipe.name }}">
+      <button class="edit">Change Image</button>
+    </div>
+    <div class="recipe-header" id="bbb">
+      <div class="slide active-slide">
+        <h4><b>{{form.recipename}}</b></h4>
+        <div class="recipe-detail" style="display: unset">
+          <p>{{form.recipedesc}}</p>
+        </div>
+      </div>
+      {% for step in form.steps %}
+      <div class="slide" id="stepprototype">
+        <h4><b>Step {{step.stepnumber}}</b></h4>
+        <div class="recipe-detail">
+          <p>{{step.steptext}}</p>
+        </div>
+      </div>
+      {% endfor %}
+      <button type="button" id="addstep">Add Step</button>
+    </div>
+    <div class="ingredients" style="display: unset">
+      {% for ingredient in form.ingredients %}
+      <div class="ingredient" id="ingredientprototype">
+        {{ingedient}}
+        <h4>{{ingredient.ingredient}}</h4>
+        <h4>{{ingredient.amount}} {{ingredient.unit}}</h4>
+      </div>
+      {% endfor %}
+      <button type="button" id="addingredient">Add Ingredients</button>
+    </div> 
+    {{form.submit}}
+  </div>
+
+  {% endif %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/editrecipe.js')}}"></script>
+
+  {% endblock %}

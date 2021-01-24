@@ -27,7 +27,6 @@ def recipes():
             db.session.add(new_step)
             db.session.commit()
         for ingredient in rform.ingredients.data: #Create each ingredient in the recipe...
-            print(ingredient['ingredient'])
             ingredient = RecipeIngredient(recipe_id=recipe.id, ingredient_id=ingredient['ingredient'], unit_id=ingredient['unit'], amount=ingredient['amount'])
             db.session.add(ingredient)
             db.session.commit()
@@ -39,6 +38,17 @@ def recipes():
         return jsonify(Recipe.serialize_list(recipes))
     recipes = Recipe.query.all()
     return render_template('recipes.html', title='Recipes', rform=rform, sform=sform, rsform=rsform, riform=riform, recipes=recipes)
+
+@app.route("/editrecipe/<int:id>", methods=["GET", "POST"])
+def editrecipe(id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    recipe = Recipe.query.get(id)
+    form = RecipeForm(obj=recipe)
+    if form.validate_on_submit():
+       pass
+    return render_template('editrecipe.html', title='Edit Recipe', form=form, recipe=recipe)
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

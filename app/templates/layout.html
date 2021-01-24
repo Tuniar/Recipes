@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="static/style/nobootstrap.css" rel="stylesheet">
-    <link href="static/style/menucards.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style/nobootstrap.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style/menucards.css') }}" rel="stylesheet">
 
     {% if title %}
         <title>MealMate - {{ title }}</title>
@@ -23,16 +23,16 @@
       <div id="menu">
         <ul>
           <li class="active">
-            <a class="" href="index.html">Home</a>
+          <a class="" href="{{ url_for('home') }}">Home</a>
           </li>
           <li class="">
-            <a class="" href="portfolio.html">Portfolio</a>
+            <a class="" href="#">Portfolio</a>
           </li>
           <li class="">
-            <a class="" href="porto.html">Porto</a>
+            <a class="" href="#">Porto</a>
           </li>
           <li class="">
-            <a class="" href="recipes.html">Recipes</a>
+            <a class="" href="{{ url_for('recipes') }}">Recipes</a>
           </li>
           {% if current_user.is_authenticated %}
           <li class="">
