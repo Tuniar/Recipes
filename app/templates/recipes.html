@@ -9,50 +9,50 @@
 
 <form id="search" method="GET" action="/recipes">
   <fieldset>
-    {{rsform.recipename(id="rname")}}
+    <!--To replace with search form.-->
   </fieldset>
 </form>
 
 <form id="create" method="POST" action="/recipes" class="recipe">
-  {{rform.hidden_tag()}}
+  {{form.hidden_tag()}}
   <fieldset>
     <div class="Create-Grid">
       <div class="Header">
         <div>
-          {{rform.recipename.label}}
-          {% if rform.recipename.errors %}
-            {% for error in rform.recipename.errors %}
+          {{form.recipename.label}}
+          {% if form.recipename.errors %}
+            {% for error in form.recipename.errors %}
               <span>{{error}}</span>
             {% endfor %}
           {% else %}
-            {{rform.recipename}}
+            {{form.recipename}}
           {% endif %}
         </div>
         <div>
-          {{rform.recipedesc.label}}
-          {% if rform.recipedesc.errors %}
-            {% for error in rform.recipedesc.errors %}
+          {{form.recipedesc.label}}
+          {% if form.recipedesc.errors %}
+            {% for error in form.recipedesc.errors %}
               <span>{{error}}</span>
             {% endfor %}
           {% else %}
-            {{rform.recipedesc}}
+            {{form.recipedesc}}
           {% endif %}
         </div>
       </div>
       <div class="Image">
-        {{rform.photo.label}}
-        {% if rform.photo.errors %}
-          {% for error in rform.photo.errors %}
+        {{form.photo.label}}
+        {% if form.photo.errors %}
+          {% for error in form.photo.errors %}
             <span>{{error}}</span>
           {% endfor %}
         {% else %}
-          {{rform.photo}}
+          {{form.photo}}
         {% endif %}
       </div>
       <div id="steps" class="Steps">
         <button type="button" id="addstep">Add Step</button>
-        {{rform.steps.label}}
-        {% for step in rform.steps %}
+        {{form.steps.label}}
+        {% for step in form.steps %}
           <div class="step" id="stepprototype">
             {{step.stepnumber.label}}
             {% if step.stepnumber.errors %}
@@ -75,8 +75,8 @@
       </div>
       <div id="ingredients" class="Ingredients">
         <button type="button" id="addingredient">Add Ingredients</button>
-        {{rform.ingredients.label}}
-        {% for ingredient in rform.ingredients %}
+        {{form.ingredients.label}}
+        {% for ingredient in form.ingredients %}
           <div class="ingredient" id="ingredientprototype">
             {{ingredient.ingredient.label}}
             {{ingredient.ingredient}}
@@ -95,7 +95,7 @@
     </div>
   </fieldset>
   <div>
-    {{rform.submit}}
+    {{form.submit}}
   </div>
 </form>
 
@@ -117,7 +117,8 @@
         <div class="recipe-detail">
           <p>{{recipe.recipedesc}}</p>
           {% if current_user.is_authenticated and current_user.id == recipe.author_id %}
-          <a href="{{url_for('editrecipe(recipe.id)')}}"><button id="edit">Edit</button></a>
+          <a href="{{url_for('editrecipe', id=recipe.id)}}"><button id="edit">Edit</button></a>
+          <a href="{{url_for('deleterecipe', id=recipe.id)}}"><button id="delete">Delete</button></a>
           {% endif %}
         </div>
       </div>
@@ -155,6 +156,7 @@
           <p>{{recipe.recipedesc}}</p>
           {% if current_user.is_authenticated and current_user.id == recipe.author_id %}
           <a href="{{url_for('editrecipe', id=recipe.id)}}"><button id="edit">Edit</button></a>
+          <a href="{{url_for('deleterecipe', id=recipe.id)}}"><button id="delete">Delete</button></a>
           {% endif %}
         </div>
       </div>

@@ -2,33 +2,37 @@ const list = document.querySelector('.recipes');
 
 let addstep = document.getElementById('addstep');
 addstep.addEventListener('click', function (event) {
-  let steps = addstep.parentElement;
-  let stepcount = steps.querySelectorAll('.step').length;
+  let steps = document.querySelector('.recipe-header');
+  let stepcount = steps.querySelectorAll('.slide').length - 1;
+  console.log(stepcount);
   let prototype = document.getElementById('stepprototype');
   let clone = prototype.cloneNode(true);
-  clone.childNodes[3].id = `steps-${stepcount}-steptext`;
-  clone.childNodes[7].id = `steps-${stepcount}-stepnumber`;
-  clone.childNodes[3].name = `steps-${stepcount}-steptext`;
-  clone.childNodes[7].name = `steps-${stepcount}-stepnumber`;
-  console.log(clone.childNodes)
+  clone.innerHTML = `<h4><b>Step <input id="steps-${stepcount}-stepnumber" name="steps-${stepcount}-stepnumber" type="text" value="${stepcount + 1}"></b></h4>
+                      <div class="recipe-detail" style="display: unset" id="steps-${stepcount}-steptext">
+                        <p><input id="steps-${stepcount}-steptext" name="steps-0-steptext" required="" type="text" value=""></p>
+                      </div>`
   steps.appendChild(clone);
 })
 // Function to copy the initial 'Add Ingredient' node when user presses Add Ingredient.
 let addingredient = document.getElementById('addingredient');
 addingredient.addEventListener('click', function (event) {
-  let ingredients = addingredient.parentElement;
+  let ingredients = document.querySelector('.ingredients');
   let ingredientcount = ingredients.querySelectorAll('.ingredient').length;
   let prototype = document.getElementById('ingredientprototype');
   let clone = prototype.cloneNode(true);
   clone.childNodes[1].id = `ingredients-${ingredientcount}-ingredient`;
   clone.childNodes[3].id = `ingredients-${ingredientcount}-unit`;
   clone.childNodes[5].id = `ingredients-${ingredientcount}-amount`;
+  clone.childNodes[1].value = "";
+  clone.childNodes[3].value = "";
+  clone.childNodes[5].value = "";
   clone.childNodes[1].name = `ingredients-${ingredientcount}-ingredient`;
   clone.childNodes[3].name = `ingredients-${ingredientcount}-unit`;
   clone.childNodes[5].name = `ingredients-${ingredientcount}-amount`;
   ingredients.appendChild(clone);
 })
 
+// carousel
 list.addEventListener('click', function(e) {// Listen for clicks on recipes grid
   if (!e.target.closest('.recipes-active')) return;
   let recipe = e.target.closest('.recipe');
@@ -47,3 +51,18 @@ list.addEventListener('click', function(e) {// Listen for clicks on recipes grid
     slides[index + 1].classList.add('active-slide');
   }
 });
+
+list.addEventListener('click', function(e) { // Function to delete a step
+  let deletestep = e.target.closest('.deletestep');
+  if (!deletestep) return;
+  let steps = document.querySelector('.recipe-header');
+  deletestep.parentElement.remove();
+  let stepcount = steps.querySelectorAll('.ingredient').length;
+  for (i = 1; i < stepcount; i++) {
+    steps[i].innerHTML = `<h4><b>Step <input id="steps-${stepcount}-stepnumber" name="steps-${stepcount}-stepnumber" type="text" value="${stepcount + 1}"></b></h4>
+                      <div class="recipe-detail" style="display: unset" id="steps-${stepcount}-steptext">
+                        <p><input id="steps-${stepcount}-steptext" name="steps-0-steptext" required="" type="text" value=""></p>
+                      </div>`
+  }
+});
+

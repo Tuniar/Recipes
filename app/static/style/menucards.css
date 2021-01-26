@@ -41,10 +41,6 @@
 .ingredients .ingredient:nth-child(even) {background: #CCC}
 .ingredients .ingredient:nth-child(odd) {background: #FFF}
 
-.recipes-active > .recipe-header > .slide > .recipe-detail {
-  display: initial;
-}
-
 .recipe > img {
   display: block;
   margin-left: auto;
@@ -58,6 +54,10 @@
 
 .recipe-detail {
   display: none;
+}
+
+.recipes-active > .recipe-header > .slide > .recipe-detail {
+  display: initial;
 }
 
 .slide {

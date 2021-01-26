@@ -7,6 +7,8 @@
   Solution is to create a smaller CSS and JS file for this page -->
 
   {% if recipe %}
+<form id="edit" method="POST" action="{{url_for('editrecipe', id=recipe.id)}}">
+  {{form.hidden_tag()}}
   <div class="recipe">
     <div class="recipe-image">
       <img class="" src="static/images/bbb.jpg" alt="{{ recipe.name }}">
@@ -20,27 +22,30 @@
         </div>
       </div>
       {% for step in form.steps %}
-      <div class="slide" id="stepprototype">
+      <div class="slide" id="stepprototype" style="display: unset">
         <h4><b>Step {{step.stepnumber}}</b></h4>
-        <div class="recipe-detail">
+        <div class="recipe-detail" style="display: unset">
           <p>{{step.steptext}}</p>
         </div>
+        <button type="button" id="deletestep{{loop.index0}}" class="deletestep">Delete</button>
       </div>
       {% endfor %}
-      <button type="button" id="addstep">Add Step</button>
     </div>
+    <button type="button" id="addstep">Add Step</button>
     <div class="ingredients" style="display: unset">
       {% for ingredient in form.ingredients %}
       <div class="ingredient" id="ingredientprototype">
-        {{ingedient}}
         <h4>{{ingredient.ingredient}}</h4>
-        <h4>{{ingredient.amount}} {{ingredient.unit}}</h4>
+        <h4>{{ingredient.amount}}</h4>
+        <h4>{{ingredient.unit}}</h4>
+        <button type="button" id="deleteingredient{{loop.index0}}" class="deleteingredient">Delete</button>
       </div>
       {% endfor %}
-      <button type="button" id="addingredient">Add Ingredients</button>
-    </div> 
+    </div>
+    <button type="button" id="addingredient">Add Ingredients</button> 
     {{form.submit}}
   </div>
+</form>
 
   {% endif %}
 

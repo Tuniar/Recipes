@@ -89,11 +89,11 @@ addstep.addEventListener('click', function (event) {
   let stepcount = steps.querySelectorAll('.step').length;
   let prototype = document.getElementById('stepprototype');
   let clone = prototype.cloneNode(true);
+  console.log(clone);
   clone.childNodes[3].id = `steps-${stepcount}-steptext`;
   clone.childNodes[7].id = `steps-${stepcount}-stepnumber`;
   clone.childNodes[3].name = `steps-${stepcount}-steptext`;
   clone.childNodes[7].name = `steps-${stepcount}-stepnumber`;
-  console.log(clone.childNodes)
   steps.appendChild(clone);
 })
 // Function to copy the initial 'Add Ingredient' node when user presses Add Ingredient.

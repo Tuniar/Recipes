@@ -12,32 +12,29 @@ def home():
 def recipes():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    rform = RecipeForm() #Include form to create a recipe.
-    sform = RecipeStepForm() #Subform to add a step.
-    rsform = SearchRecipeForm() #Form to search for recipes (not used yet)
-    riform = RecipeIngredientForm() #Subform to add an ingredient.
-    if rform.validate_on_submit(): #When the create form is submitted...
-        recipe = Recipe(recipename=rform.recipename.data, recipedesc=rform.recipedesc.data, author_id=current_user.id) #Create the recipe...
+    form = RecipeForm() #Include form to create a recipe.
+    if form.validate_on_submit(): #When the create form is submitted...
+        recipe = Recipe(recipename=form.recipename.data, recipedesc=form.recipedesc.data, author_id=current_user.id) #Create the recipe...
         db.session.add(recipe)
         db.session.commit()
         stepcount = RecipeStep.query.filter(RecipeStep.recipe_id == recipe.id).count()
-        for step in rform.steps.data: #Create each step in the recipe...
+        for step in form.steps.data: #Create each step in the recipe...
             stepcount += 1
             new_step = RecipeStep(stepnumber=stepcount, steptext=step['steptext'], recipe_id=recipe.id)
             db.session.add(new_step)
             db.session.commit()
-        for ingredient in rform.ingredients.data: #Create each ingredient in the recipe...
+        for ingredient in form.ingredients.data: #Create each ingredient in the recipe...
             ingredient = RecipeIngredient(recipe_id=recipe.id, ingredient_id=ingredient['ingredient'], unit_id=ingredient['unit'], amount=ingredient['amount'])
             db.session.add(ingredient)
             db.session.commit()
         flash('Your recipe has been created!', 'success')
-        return render_template('recipes.html', title='Recipes', rform=rform, sform=sform, rsform=rsform, riform=riform, recipe=recipe)
+        return render_template('recipes.html', title='Recipes', form=form, recipe=recipe)
     searchstring = request.args.get("q")
     if searchstring is not None:
         recipes = Recipe.query.filter(Recipe.recipename.contains(searchstring)).all()
         return jsonify(Recipe.serialize_list(recipes))
     recipes = Recipe.query.all()
-    return render_template('recipes.html', title='Recipes', rform=rform, sform=sform, rsform=rsform, riform=riform, recipes=recipes)
+    return render_template('recipes.html', title='Recipes', form=form, recipes=recipes)
 
 @app.route("/editrecipe/<int:id>", methods=["GET", "POST"])
 def editrecipe(id):
@@ -45,9 +42,37 @@ def editrecipe(id):
         return redirect(url_for('login'))
     recipe = Recipe.query.get(id)
     form = RecipeForm(obj=recipe)
-    if form.validate_on_submit():
-       pass
+    if form.validate_on_submit(): # Question here: Doesn't seem to validate in all cases.
+        print("valid")
+        recipe.recipename = form.recipename.data
+        recipe.recipedesc = form.recipedesc.data
+        RecipeStep.query.filter(RecipeStep.recipe_id == recipe.id).delete()
+        RecipeIngredient.query.filter(RecipeIngredient.recipe_id == recipe.id).delete()
+        stepcount = RecipeStep.query.filter(RecipeStep.recipe_id == recipe.id).count()
+        for step in form.steps.data: #Create each step in the recipe...
+            stepcount += 1
+            new_step = RecipeStep(stepnumber=stepcount, steptext=step['steptext'], recipe_id=recipe.id)
+            db.session.add(new_step)
+            db.session.commit()
+        for ingredient in form.ingredients.data: #Create each ingredient in the recipe..
+            ingredient = RecipeIngredient(recipe_id=recipe.id, ingredient_id=ingredient['ingredient'], unit_id=ingredient['unit'], amount=ingredient['amount'])
+            db.session.add(ingredient)
+            db.session.commit()
+        flash('Your recipe has been updated!', 'success')
+        return render_template('recipes.html', title='Recipes', form=form, recipe=recipe)
+    else:
+        print("invalid")
     return render_template('editrecipe.html', title='Edit Recipe', form=form, recipe=recipe)
+
+@app.route("/deleterecipe/<int:id>", methods=["GET", "POST"])
+def deleterecipe(id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    db.session.query(RecipeIngredient).filter(RecipeIngredient.recipe_id == id).delete()
+    db.session.query(RecipeStep).filter(RecipeStep.recipe_id == id).delete()
+    db.session.query(Recipe).filter(Recipe.id == id).delete()
+    db.session.commit()
+    return redirect(url_for('recipes'))
 
 
 @app.route("/register", methods=["GET", "POST"])
