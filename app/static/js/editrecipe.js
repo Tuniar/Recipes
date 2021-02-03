@@ -57,12 +57,14 @@ list.addEventListener('click', function(e) { // Function to delete a step
   if (!deletestep) return;
   let steps = document.querySelector('.recipe-header');
   deletestep.parentElement.remove();
-  let stepcount = steps.querySelectorAll('.ingredient').length;
+  let stepcount = steps.querySelectorAll('.slide').length;
+  console.log(stepcount);
   for (i = 1; i < stepcount; i++) {
-    steps[i].innerHTML = `<h4><b>Step <input id="steps-${stepcount}-stepnumber" name="steps-${stepcount}-stepnumber" type="text" value="${stepcount + 1}"></b></h4>
-                      <div class="recipe-detail" style="display: unset" id="steps-${stepcount}-steptext">
-                        <p><input id="steps-${stepcount}-steptext" name="steps-0-steptext" required="" type="text" value=""></p>
-                      </div>`
+    let text = steps[i].querySelector('.steptext > input:first-of-type');
+    let number = steps[i].querySelector('.stepnumber  > input:first-of-type');
+    console.log(text);
+    text.name = `steps-${stepcount}-steptext`;
+    number.name = `steps-${stepcount}-stepnumber`;
   }
 });
 

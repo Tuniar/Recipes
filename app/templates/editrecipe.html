@@ -23,9 +23,9 @@
       </div>
       {% for step in form.steps %}
       <div class="slide" id="stepprototype" style="display: unset">
-        <h4><b>Step {{step.stepnumber}}</b></h4>
+        <h4><b class="stepnumber">Step {{step.stepnumber}}</b></h4>
         <div class="recipe-detail" style="display: unset">
-          <p>{{step.steptext}}</p>
+          <p class="steptext">{{step.steptext}}</p>
         </div>
         <button type="button" id="deletestep{{loop.index0}}" class="deletestep">Delete</button>
       </div>
