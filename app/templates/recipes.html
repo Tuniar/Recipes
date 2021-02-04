@@ -7,9 +7,21 @@
   <button id="createb">Create a Recipe</button>
 </div>
 
-<form id="search" method="GET" action="/recipes">
+<form id="search" method="POST" action="/searchrecipes">
   <fieldset>
-    <!--To replace with search form.-->
+    <div class="Create-Grid">
+      <div class="Header">
+        <div class="Namesearch">
+          {{sform.recipename.label}}
+          {{sform.recipename}}
+        </div>
+        <div class="Ingsearch">
+          {{sform.ingredients.label}}
+          {{sform.ingredients}}
+        </div>
+        {{sform.submit}}
+      </div>
+    </div>
   </fieldset>
 </form>
 
@@ -107,7 +119,7 @@
   {% if recipe %}
   <div class="recipe">
     <div class="recipe-image">
-      <img class="" src="static/images/bbb.jpg" alt="{{ recipe.name }}">
+      <img class="" src="{{url_for('static', filename='images/' + recipe.image_file)}}" alt="{{ recipe.name }}">
       <button class="edit">Change Image</button>
     </div>
     <div class="recipe-header" id="bbb">
@@ -145,7 +157,7 @@
   {% for recipe in recipes %}
   <div class="recipe">
     <div class="recipe-image">
-      <img class="" src="static/images/bbb.jpg" alt="{{ recipe.name }}">
+      <img class="" src="{{url_for('static', filename='images/' + recipe.image_file)}}" alt="{{ recipe.name }}">
       <button class="edit">Change Image</button>
     </div>
     <div class="recipe-header" id="bbb">

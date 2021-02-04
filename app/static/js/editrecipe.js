@@ -55,16 +55,11 @@ list.addEventListener('click', function(e) {// Listen for clicks on recipes grid
 list.addEventListener('click', function(e) { // Function to delete a step
   let deletestep = e.target.closest('.deletestep');
   if (!deletestep) return;
-  let steps = document.querySelector('.recipe-header');
   deletestep.parentElement.remove();
-  let stepcount = steps.querySelectorAll('.slide').length;
-  console.log(stepcount);
-  for (i = 1; i < stepcount; i++) {
-    let text = steps[i].querySelector('.steptext > input:first-of-type');
-    let number = steps[i].querySelector('.stepnumber  > input:first-of-type');
-    console.log(text);
-    text.name = `steps-${stepcount}-steptext`;
-    number.name = `steps-${stepcount}-stepnumber`;
-  }
 });
 
+list.addEventListener('click', function(e) { // Function to delete a step
+  let deleteing = e.target.closest('.deleteingredient');
+  if (!deleteing) return;
+  deleteing.parentElement.remove();
+});

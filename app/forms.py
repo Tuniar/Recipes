@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import Form, StringField, SubmitField, FileField, IntegerField, TextAreaField, PasswordField, BooleanField, FieldList, FormField, SelectField
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import User, Unit, Ingredient
 from flask_login import current_user
@@ -77,3 +78,6 @@ class RecipeForm(FlaskForm):
 
 class SearchRecipeForm(FlaskForm):
   recipename = StringField('Recipe Name', validators=[DataRequired(), Length(max=20)])
+  ingredients = QuerySelectMultipleField('Ingredients', query_factory=lambda:
+                            Ingredient.query.all())
+  submit = SubmitField('Search Recipes')

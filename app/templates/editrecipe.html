@@ -7,11 +7,11 @@
   Solution is to create a smaller CSS and JS file for this page -->
 
   {% if recipe %}
-<form id="edit" method="POST" action="{{url_for('editrecipe', id=recipe.id)}}">
+<form id="edit" method="POST" action="{{url_for('editrecipe', id=recipe.id)}}" enctype="multipart/form-data">
   {{form.hidden_tag()}}
   <div class="recipe">
     <div class="recipe-image">
-      <img class="" src="static/images/bbb.jpg" alt="{{ recipe.name }}">
+      <img class="" src="{{url_for('static', filename='images/' + recipe.image_file)}}" alt="{{ recipe.name }}">
       <button class="edit">Change Image</button>
     </div>
     <div class="recipe-header" id="bbb">
@@ -20,6 +20,15 @@
         <div class="recipe-detail" style="display: unset">
           <p>{{form.recipedesc}}</p>
         </div>
+      </div>
+      <div class="form-group">
+        {{ form.picture.label() }}
+        {{ form.picture(class="form-control-file") }}
+        {% if form.picture.errors %}
+            {% for error in form.picture.errors %}
+                <span class="text-danger">{{ error }}</span></br>
+            {% endfor %}
+        {% endif %}
       </div>
       {% for step in form.steps %}
       <div class="slide" id="stepprototype" style="display: unset">
@@ -35,9 +44,9 @@
     <div class="ingredients" style="display: unset">
       {% for ingredient in form.ingredients %}
       <div class="ingredient" id="ingredientprototype">
-        <h4>{{ingredient.ingredient}}</h4>
-        <h4>{{ingredient.amount}}</h4>
-        <h4>{{ingredient.unit}}</h4>
+        <h4 class="ingvalue">{{ingredient.ingredient}}</h4>
+        <h4 class="ingamount">{{ingredient.amount}}</h4>
+        <h4 class="ingunit">{{ingredient.unit}}</h4>
         <button type="button" id="deleteingredient{{loop.index0}}" class="deleteingredient">Delete</button>
       </div>
       {% endfor %}

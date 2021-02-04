@@ -1,7 +1,7 @@
 import os
 import secrets
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
-from app.forms import RecipeForm, RecipeStepForm, SearchRecipeForm, RegistrationForm, LoginForm, RecipeIngredientForm, UpdateAccountForm
+from app.forms import RecipeForm, SearchRecipeForm, RegistrationForm, LoginForm, UpdateAccountForm
 from app import app, db, bcrypt
 from app.models import Recipe, RecipeStep, User, Unit, RecipeIngredient, Ingredient
 from flask_login import login_user, current_user, logout_user, login_required
@@ -11,7 +11,7 @@ def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    picture_path = os.path.join(app.root_path, 'static/images', picture_fn)
 
     output_size = (125, 125)
     i = Image.open(form_picture)
@@ -29,6 +29,7 @@ def recipes():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     form = RecipeForm() #Include form to create a recipe.
+    sform = SearchRecipeForm()
     if form.validate_on_submit(): #When the create form is submitted...
         recipe = Recipe(recipename=form.recipename.data, recipedesc=form.recipedesc.data, author_id=current_user.id) #Create the recipe...
         if form.picture.data: #If picture exists, save it and add filename to recipe
@@ -48,12 +49,8 @@ def recipes():
             db.session.commit()
         flash('Your recipe has been created!', 'success')
         return render_template('recipes.html', title='Recipes', form=form, recipe=recipe)
-    searchstring = request.args.get("q")
-    if searchstring is not None:
-        recipes = Recipe.query.filter(Recipe.recipename.contains(searchstring)).all()
-        return jsonify(Recipe.serialize_list(recipes))
     recipes = Recipe.query.all()
-    return render_template('recipes.html', title='Recipes', form=form, recipes=recipes)
+    return render_template('recipes.html', title='Recipes', form=form, recipes=recipes, sform=sform)
 
 @app.route("/editrecipe/<int:id>", methods=["GET", "POST"])
 def editrecipe(id):
@@ -62,6 +59,9 @@ def editrecipe(id):
     recipe = Recipe.query.get(id)
     form = RecipeForm(obj=recipe)
     if form.validate_on_submit(): # Question here: Doesn't seem to validate in all cases.
+        if form.picture.data: #If picture exists, save it and add filename to recipe
+            picture_file = save_picture(form.picture.data)
+            recipe.image_file = picture_file
         recipe.recipename = form.recipename.data
         recipe.recipedesc = form.recipedesc.data
         RecipeStep.query.filter(RecipeStep.recipe_id == recipe.id).delete()
@@ -79,6 +79,21 @@ def editrecipe(id):
         flash('Your recipe has been updated!', 'success')
         return render_template('recipes.html', title='Recipes', form=form, recipe=recipe)
     return render_template('editrecipe.html', title='Edit Recipe', form=form, recipe=recipe)
+
+@app.route("/searchrecipes", methods=["POST"]) ## Get this working and move onto style?
+def searchrecipes():
+    form = RecipeForm()
+    sform = SearchRecipeForm()
+    if form.validate_on_submit:
+        if sform.ingredients.data and sform.recipename.data:
+            recipes = Recipe.query.filter
+            pass
+        elif form.recipename.data:
+            recipes = Recipe.query.filter(Recipe.recipename.like(sform.recipename.data))
+
+        return render_template('recipes.html', title='Recipes', form=form, sform=sform, recipes=recipes)
+
+
 
 @app.route("/deleterecipe/<int:id>", methods=["GET", "POST"])
 def deleterecipe(id):
@@ -141,6 +156,6 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    image_file = url_for('static', filename='images/' + current_user.image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
