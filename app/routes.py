@@ -20,6 +20,16 @@ def save_picture(form_picture):
 
     return picture_fn
 
+def search_recipes(args):
+    print(args)
+    if args['user']:
+        return Recipe.query.filter(Recipe.author_id==args['user'])
+    if args['name']:
+        name = request.args.get('name')
+        return Recipe.query.filter(Recipe.recipename==name)
+    else:
+        return Recipe.query.all()
+
 @app.route("/")
 def home():
     return redirect(url_for('recipes'))
@@ -48,8 +58,12 @@ def recipes():
             db.session.add(ingredient)
             db.session.commit()
         flash('Your recipe has been created!', 'success')
-        return render_template('recipes.html', title='Recipes', form=form, recipe=recipe)
-    recipes = Recipe.query.all()
+        return render_template('recipes.html', title='Recipes', form=form, recipe=recipe, sform=sform)
+    if request.args:
+        recipes = search_recipes(request.args)
+        
+    else:
+        recipes = Recipe.query.all()
     return render_template('recipes.html', title='Recipes', form=form, recipes=recipes, sform=sform)
 
 @app.route("/editrecipe/<int:id>", methods=["GET", "POST"])

@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ url_for('static', filename='style/nobootstrap.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='style/menucards.css') }}" rel="stylesheet">
+    <!--<link href="{{ url_for('static', filename='style/nobootstrap.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style/menucards.css') }}" rel="stylesheet">-->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
     {% if title %}
         <title>MealMate - {{ title }}</title>
@@ -12,40 +13,41 @@
         <title>MealMate</title>
     {% endif %}
   </head>
-  <body class="container">
+  <body class="bg-gray-100">
     <!-- Navigation-->
-    <nav class="nav">
-      <a class="" href="#"><img src="logo.jpg"></a>
-      <div class="menu-btn">
+    <nav class="bg-gray-800">
+      <!--<div class="menu-btn">
         <div class="menu-btn-burger">
         </div>
-      </div>
-      <div id="menu">
-        <ul>
-          <li class="active">
-          <a class="" href="{{ url_for('home') }}">Home</a>
+      </div>-->
+      <div class="flex p-4 justify-between">
+        <ul class="flex flex-row flex-initial">
+          <li class="bg-gray-600 p-1">
+            <a class="" href="{{ url_for('home') }}">Home</a>
           </li>
-          <li class="">
+          <li class="p-1 hover:bg-gray-500">
             <a class="" href="#">Portfolio</a>
           </li>
-          <li class="">
+          <li class="p-1 hover:bg-gray-500">
             <a class="" href="#">Porto</a>
           </li>
-          <li class="">
+          <li class="p-1 hover:bg-gray-500">
             <a class="" href="{{ url_for('recipes') }}">Recipes</a>
           </li>
-          {% if current_user.is_authenticated %}
-          <li class="">
+        </ul>
+        <ul class="flex flex-row flex-initial justify-self-end">
+        {% if current_user.is_authenticated %} 
+          <li class="p-1 hover:bg-gray-500">
             <a class="" href="{{ url_for('logout') }}">Logout</a>
           </li>
-          <li class="">
+          <li class="p-1 hover:bg-gray-500">
             <a class="" href="{{ url_for('account') }}">Account</a>
           </li>
           {% else %}
-          <li class="">
+          <li class="p-1 hover:bg-gray-500">
             <a class="" href="{{ url_for('login') }}">Login</a>
           </li>
-          <li class="">
+          <li class="p-1 hover:bg-gray-500">
             <a class="" href="{{ url_for('register') }}">Register</a>
           </li>
           {% endif %}
