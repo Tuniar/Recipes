@@ -20,20 +20,20 @@ def add_recipe():
   return recipe_schema.jsonify(new_recipe)
 
 # Get All Recipes
-@app.route('/recipe', methods=['GET'])
+@app.route('/recipes', methods=['GET'])
 def get_recipes():
   all_recipes = Recipe.query.all()
   result = recipes_schema.dump(all_recipes)
-  return jsonify(result.data)
+  return jsonify(result)
 
 # Get Single Recipes
-@app.route('/recipe/<id>', methods=['GET'])
+@app.route('/recipes/<id>', methods=['GET'])
 def get_recipe(id):
   recipe = Recipe.query.get(id)
   return recipe_schema.jsonify(recipe)
 
 # Update a Recipe
-@app.route('/recipe/<id>', methods=['PUT'])
+@app.route('/recipes/<id>', methods=['PUT'])
 def update_recipe(id):
   recipe = Recipe.query.get(id)
 
@@ -49,7 +49,7 @@ def update_recipe(id):
   return recipe_schema.jsonify(recipe)
 
 # Delete Recipe
-@app.route('/recipe/<id>', methods=['DELETE'])
+@app.route('/recipes/<id>', methods=['DELETE'])
 def delete_recipe(id):
   recipe = Recipe.query.get(id)
   db.session.delete(recipe)

@@ -7,7 +7,7 @@ class Recipe(db.Model):
   description = db.Column(db.String(200))
   image = db.Column(db.String(20), nullable=False, default='default.jpg')
 
-  def __init__(self, name, description, price, qty):
+  def __init__(self, name, description, image):
     self.name = name
     self.description = description
     self.image = image
